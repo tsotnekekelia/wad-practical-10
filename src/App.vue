@@ -10,13 +10,16 @@
     import List from './components/List.vue'
     import Header from './components/Header.vue'
     import Footer from './components/Footer.vue'
-    import Item from "@/models/Item";
+    import axios from 'axios';
 
     export default {
         name: 'app',
         methods: {
             addToList: function (title) {
-                this.list.push(new Item(title))
+                axios.post('http://localhost:3000/users/1/tasks', {title: title})
+                    .then(response => {
+                        this.list.push(response.data);
+                    })
             }
         },
         data: () => {
@@ -28,6 +31,12 @@
             List,
             Header,
             Footer
+        },
+        mounted: function () {
+            axios.get('http://localhost:3000/users/1/tasks')
+                .then((response) => {
+                    this.list = response.data;
+                });
         }
     }
 </script>
